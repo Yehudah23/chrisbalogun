@@ -14,7 +14,7 @@
           <a :href="githubUrl" target="_blank" class="social-link github">
             <i class="social-icon">GitHub</i>
           </a>
-          <a :href="linkedinUrl" target="_blank" class="social-link linkedin">
+          <a :href="linkedinUrl" target="_blank" rel="noopener noreferrer" class="social-link linkedin">
             <i class="social-icon">LinkedIn</i>
           </a>
           <a :href="twitterUrl" target="_blank" class="social-link twitter" rel="noopener noreferrer">
@@ -26,7 +26,7 @@
           <a :href="facebookUrl" target="_blank" class="social-link facebook">
             <i class="social-icon">Facebook</i>
           </a>
-          <a :href="whatsappUrl" target="_blank" class="social-link whatsapp">
+          <a :href="whatsappUrl" target="_blank" rel="noopener noreferrer" class="social-link whatsapp">
             <i class="social-icon">Whatsapp</i>
           </a>
         </div>
@@ -50,11 +50,12 @@ export default {
       name: 'Chris Balogun',
       title: 'Biotechnology Research Scientist',
       bio: 'Advancing the frontiers of biotechnology through innovative research in molecular biology, genetics, and sustainable solutions for the future.',
-      githubUrl: 'https://github.com/chrisbalogun',
-      linkedinUrl: 'https://linkedin.com/in/chrisbalogun',
-  twitterUrl: 'https://x.com/ChrisBalogun001?t=1JZVC_Nw4AQPQLm8MHtxZA&s=09',
-      instagramUrl: 'https://instagram.com/chrisbalogun',
-      facebookUrl: 'https://facebook.com/chrisbalogun'
+    githubUrl: 'https://github.com/ChrisBalogun',
+    linkedinUrl: 'https://www.linkedin.com/in/chris-balogun-3aa518257?utm_source=share_via&utm_content=profile&utm_medium=member_android',
+    twitterUrl: 'https://x.com/ChrisBalogun001?t=1JZVC_Nw4AQPQLm8MHtxZA&s=09',
+    instagramUrl: 'https://www.instagram.com/chrisbalogun001?igsh=MTJmdjAyejJ3MDEzdQ==',
+    facebookUrl: 'https://www.facebook.com/share/1BRqJDrvcF/',
+    whatsappUrl: 'https://wa.me/qr/57OYZETW4AE5F1'
     };
   },
   computed: {

@@ -1,13 +1,13 @@
 <template>
   <section id="about" class="about-section">
     <div class="about-container">
-      <div class="about-image-wrapper">
-        <img
-          src="https://images.unsplash.com/photo-1707944745900-ae9f750f2c69?crop=entropy&cs=tinysrgb&fit=max&fm=jpg"
-          alt="Research Scientist at Work"
-          class="about-image"
-        />
-      </div>
+          <div class="about-image-wrapper">
+            <img
+              :src="imageSrc"
+              alt="Research Scientist at Work"
+              class="about-image"
+            />
+          </div>
       <div class="about-content">
         <h2 class="about-title">About Me</h2>
         <p class="about-lead">
@@ -35,9 +35,12 @@
 </template>
 
 <script>
+import broChris from '@/assets/brochris.png';
+
 export default {
   data() {
     return {
+      imageSrc: broChris,
       expertise: [
         { iconLabel: '🔬', title: "Molecular Biology", description: "Advanced techniques in gene expression, protein synthesis, and cellular mechanisms" },
         { iconLabel: '🧬', title: "Genetic Engineering", description: "CRISPR-Cas9, recombinant DNA technology, and synthetic biology applications" },
