@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '@/services/api';
 export default {
   data() {
     return {
@@ -71,7 +71,7 @@ export default {
         if (token) headers.Authorization = 'Bearer ' + token;
       }
       
-      axios.get('http://127.0.0.1:8000/api/documents', { headers })
+  api.get('/api/documents', { headers })
         .then(res => {
           if (!res || !res.data) return;
           if (Array.isArray(res.data)) {

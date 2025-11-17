@@ -15,7 +15,7 @@
 </template>
 
 <script >
-import axios from 'axios'
+import api from '@/services/api'
 
 export default{
     data(){
@@ -38,7 +38,7 @@ export default{
                 role: this.role
             }
         
-             axios.post('http://127.0.0.1:8000/api/register', data)
+             api.post('/api/register', data)
         .then(response => {
             console.log(response.data);
             if(response.data.status==201){

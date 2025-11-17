@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '@/services/api';
 
 export default {
   name: 'AdminView',
@@ -159,7 +159,7 @@ export default {
       this.msg = 'Uploading...';
       this.msgType = 'success';
       
-      axios.post('http://127.0.0.1:8000/api/documents', fd, { headers })
+  api.post('/api/documents', fd, { headers })
         .then(r => { 
           this.msg = r.data.msg || 'CV uploaded successfully!'; 
           this.msgType = 'success';
@@ -201,7 +201,7 @@ export default {
       this.msgPub = 'Uploading...';
       this.msgPubType = 'success';
       
-      axios.post('http://127.0.0.1:8000/api/documents', fd, { headers })
+  api.post('/api/documents', fd, { headers })
         .then(r => { 
           this.msgPub = r.data.msg || 'Publication uploaded successfully!'; 
           this.msgPubType = 'success';
@@ -223,7 +223,7 @@ export default {
         if (token) headers.Authorization = 'Bearer ' + token; 
       }
       
-      axios.get('http://127.0.0.1:8000/api/documents', { headers })
+  api.get('/api/documents', { headers })
         .then(res => {
           // normalize to array
           this.cvs = Array.isArray(res.data) ? res.data : (res.data ? [res.data] : []);
@@ -238,7 +238,7 @@ export default {
         if (token) headers.Authorization = 'Bearer ' + token; 
       }
       
-      axios.get('http://127.0.0.1:8000/api/documents', { headers })
+  api.get('/api/documents', { headers })
         .then(res => {
           this.pubs = Array.isArray(res.data) ? res.data : (res.data ? [res.data] : []);
         }).catch(() => { 

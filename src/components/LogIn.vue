@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import api from '@/services/api'
 
 export default {
     name: 'LogIn',
@@ -52,7 +52,7 @@ export default {
                 password: this.password,
             }
             
-            axios.post('http://127.0.0.1:8000/api/login', data)
+            api.post('/api/login', data)
             .then(res => {
                 console.log(res.data);
                 this.loading = false;
