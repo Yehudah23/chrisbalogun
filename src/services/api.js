@@ -1,9 +1,8 @@
 import axios from 'axios';
 
-// Central axios instance. Uses VUE_APP_API_BASE_URL if provided. For local
-// development we prefer an empty base so the Vue dev-server proxy (see
-// `vue.config.js`) can forward `/api` requests to the backend.
-const baseURL = process.env.VUE_APP_API_BASE_URL || '';
+// Central axios instance. Uses VUE_APP_API_BASE_URL if provided. If not set,
+// use the production API host on Vercel provided by the user.
+const baseURL = process.env.VUE_APP_API_BASE_URL || 'https://chris-balogun-pjg2.vercel.app';
 
 const api = axios.create({
   baseURL,
@@ -31,6 +30,7 @@ api.interceptors.request.use(
       }
     } catch (e) {
       // ignore JSON parse errors or restricted storage access
+      void 0;
     }
     return config;
   },
@@ -41,18 +41,19 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    try {
-      const status = error?.response?.status;
-      if (status === 401) {
-        try { localStorage.removeItem('laraveluser'); } catch (e) {}
-        if (typeof window !== 'undefined') {
-          // navigate to login page
-          window.location.href = '/login';
+      try {
+        const status = error?.response?.status;
+        if (status === 401) {
+          try { localStorage.removeItem('laraveluser'); } catch (e) { void 0; }
+          if (typeof window !== 'undefined') {
+            // navigate to login page
+            window.location.href = '/login';
+          }
         }
+      } catch (e) {
+        // ignore
+        void 0;
       }
-    } catch (e) {
-      // ignore
-    }
     return Promise.reject(error);
   }
 );

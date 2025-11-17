@@ -254,7 +254,7 @@ export default {
         if (token) headers.Authorization = 'Bearer ' + token; 
       }
       
-      axios.delete(`http://127.0.0.1:8000/api/documents/${id}`, { headers })
+      api.delete(`/api/documents/${id}`, { headers })
         .then(() => { 
           this.cvs.splice(index, 1); 
           this.msg = 'CV deleted successfully';
@@ -274,7 +274,7 @@ export default {
         if (token) headers.Authorization = 'Bearer ' + token; 
       }
       
-      axios.delete(`http://127.0.0.1:8000/api/documents/${id}`, { headers })
+      api.delete(`/api/documents/${id}`, { headers })
         .then(() => { 
           this.pubs.splice(index, 1); 
           this.msgPub = 'Publication deleted successfully';
