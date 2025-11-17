@@ -38,6 +38,10 @@ export default {
             loading: false
         }
     },
+    mounted() {
+        // Ensure any previous admin session is cleared when visiting login
+        try { localStorage.removeItem('laraveluser'); } catch (e) { /* ignore */ }
+    },
     methods:{
         loginUser(){
         

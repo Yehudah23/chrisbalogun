@@ -7,7 +7,7 @@
         <a href="cv" @click.prevent="scrollToSection('cv')">CV</a>
         <a href="publications" @click.prevent="scrollToSection('publications')">Publications</a>
         <a href="contact" @click.prevent="scrollToSection('contact')">Contact</a>
-        <router-link to="/login" class="login-link" @click="closeMenu">Admin Login</router-link>
+  <a href="#" class="login-link" @click.prevent="openLogin">Admin Login</a>
       </nav>
       <button class="navbar-toggle" @click="toggleMenu">
         <span v-if="!isMenuOpen">&#9776;</span>
@@ -37,6 +37,13 @@ export default {
         element.scrollIntoView({ behavior: 'smooth' });
         this.closeMenu();
       }
+    }
+    ,
+    openLogin() {
+      // Clear any stored session so login always requires password
+      try { localStorage.removeItem('laraveluser'); } catch (e) { /* ignore */ }
+      this.closeMenu();
+      this.$router.push({ name: 'login' });
     }
   }
 };

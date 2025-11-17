@@ -11,7 +11,7 @@
       <div class="about-content">
         <h2 class="about-title">About Me</h2>
         <p class="about-lead">
-          With over 10 years of experience in biotechnology research, I specialize in developing innovative solutions at the intersection of biology and technology. My work focuses on sustainable biotechnological applications for healthcare, agriculture, and environmental remediation.
+          With about 7 years of experience in biotechnology research, I specialize in developing innovative solutions at the intersection of biology and technology. My work focuses on sustainable biotechnological applications for healthcare, agriculture, and environmental remediation.
         </p>
         <h3 class="about-subtitle">Research Philosophy</h3>
         <p class="about-text">
