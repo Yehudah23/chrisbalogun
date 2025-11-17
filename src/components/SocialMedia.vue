@@ -17,7 +17,7 @@
           <a :href="linkedinUrl" target="_blank" class="social-link linkedin">
             <i class="social-icon">LinkedIn</i>
           </a>
-          <a :href="twitterUrl" target="_blank" class="social-link twitter">
+          <a :href="twitterUrl" target="_blank" class="social-link twitter" rel="noopener noreferrer">
             <i class="social-icon">Twitter</i>
           </a>
           <a :href="instagramUrl" target="_blank" class="social-link instagram">
@@ -26,8 +26,8 @@
           <a :href="facebookUrl" target="_blank" class="social-link facebook">
             <i class="social-icon">Facebook</i>
           </a>
-          <a href="#contact" @click.prevent="scrollToContact" class="social-link contact">
-            <i class="social-icon">Contact Me</i>
+          <a :href="whatsappUrl" target="_blank" class="social-link whatsapp">
+            <i class="social-icon">Whatsapp</i>
           </a>
         </div>
         
@@ -52,7 +52,7 @@ export default {
       bio: 'Advancing the frontiers of biotechnology through innovative research in molecular biology, genetics, and sustainable solutions for the future.',
       githubUrl: 'https://github.com/chrisbalogun',
       linkedinUrl: 'https://linkedin.com/in/chrisbalogun',
-      twitterUrl: 'https://twitter.com/chrisbalogun',
+  twitterUrl: 'https://x.com/ChrisBalogun001?t=1JZVC_Nw4AQPQLm8MHtxZA&s=09',
       instagramUrl: 'https://instagram.com/chrisbalogun',
       facebookUrl: 'https://facebook.com/chrisbalogun'
     };
