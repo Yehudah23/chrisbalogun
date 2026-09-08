@@ -2,9 +2,21 @@
     <div class="login-container">
         <div class="login-card">
             <h2>Admin Login</h2>
-            <p class="subtitle">Please enter the admin password to access the panel</p>
+            <p class="subtitle">Please enter your administrator credentials</p>
             <div v-if="msg" class="alert" :class="msgType">{{ msg }}</div>
             <form @submit.prevent="loginUser">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        v-model="email"
+                        placeholder="admin@example.com"
+                        required
+                        :disabled="loading"
+                        autocomplete="email"
+                    >
+                </div>
                 <div class="form-group">
                     <label for="password">Admin Password</label>
                     <input 
@@ -26,12 +38,13 @@
 </template>
 
 <script>
-import api from '@/services/api'
+import { adminStatus, login } from '@/services/firebase'
 
 export default {
     name: 'LogIn',
     data(){
         return{
+            email:'',
             password:'',
             msg:'',
             msgType: 'alert-danger',
@@ -39,64 +52,39 @@ export default {
         }
     },
     mounted() {
-        // Ensure any previous admin session is cleared when visiting login
-        try { localStorage.removeItem('laraveluser'); } catch (e) { /* ignore */ }
+        // Firebase manages session persistence; do not clear it on page entry.
     },
     methods:{
-        loginUser(){
-        
+        async loginUser(){
             this.msg = '';
             this.loading = true;
-            
-            let data = {
-                password: this.password,
-            }
-            
-            api.post('/api/login', data)
-            .then(res => {
-                console.log(res.data);
-                this.loading = false;
-                
-                if(res.data.status==201){
-                    this.msg = res.data.msg || 'Invalid credentials'
-                    this.msgType = 'alert-danger'
-                } 
-                else if(res.data.status==202 || res.data.status==203){
-                    const user = res.data.user
-                    const isAdmin = user && (
-                        user.is_admin === 1 || user.is_admin === true || 
-                        user.isAdmin === true || user.admin === 1 || 
-                        user.admin === true || user.role === 'admin' || 
-                        user.type === 'admin'
-                    );
-                    
-                    if (!isAdmin) {
-                        this.msg = 'Access denied. Only administrators can login here.'
-                        this.msgType = 'alert-danger'
-                        return;
-                    }
-                    this.msg = 'Login successful! Redirecting to admin panel...'
-                    this.msgType = 'alert-success'
-                    localStorage.setItem('laraveluser', JSON.stringify(user))
-                    
-                    setTimeout(() => {
-                        this.$router.push({name:'admin'})
-                    }, 1500);
-                } 
-                else if(res.data.status==501){
-                    this.msg = res.data.msg || 'Login failed'
-                    this.msgType = 'alert-danger'
-                } else{
-                    this.msg = 'Login failed. Please try again.'
-                    this.msgType = 'alert-danger'
+            try {
+                const user = await login(this.email, this.password);
+                const status = await adminStatus(user);
+                if (!status.allowed) {
+                    this.msg = status.reason === 'missing-profile'
+                        ? `Signed in, but no Firestore profile exists for ${user.email}. Create users/${user.uid} with role: admin.`
+                        : status.reason === 'missing-role'
+                            ? `Signed in, but users/${user.uid} is not an admin. Set its role field to admin.`
+                            : 'Signed in, but Firestore denied access to your admin profile. Publish firestore.rules in Firebase Console, then try again.';
+                    this.msgType = 'alert-danger';
+                    return;
                 }
-            })
-            .catch(err => {
-                console.error('Login error:', err);
-                this.loading = false;
-                this.msg = 'Connection error. Please check if the server is running.'
+                this.msg = 'Login successful! Redirecting to admin panel...';
+                this.msgType = 'alert-success';
+                setTimeout(() => this.$router.push({ name: 'admin' }), 700);
+            } catch (error) {
+                if (error.code === 'auth/invalid-credential') {
+                    this.msg = 'Invalid email or password.';
+                } else if (error.code === 'permission-denied') {
+                    this.msg = 'Your Firebase user needs a users/<uid> document with role: admin.';
+                } else {
+                    this.msg = error.message || 'Login failed. Please try again.';
+                }
                 this.msgType = 'alert-danger'
-            })
+            } finally {
+                this.loading = false;
+            }
         }
     }
 }

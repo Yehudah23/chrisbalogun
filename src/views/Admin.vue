@@ -80,7 +80,14 @@
 </template>
 
 <script>
-import api from '@/services/api';
+import {
+  currentUser,
+  isAdmin,
+  listDocuments,
+  logout as firebaseLogout,
+  removeDocument,
+  uploadDocument
+} from '@/services/firebase';
 
 export default {
   name: 'AdminView',
@@ -96,16 +103,15 @@ export default {
       msgPub: '',
       msgPubType: 'success',
       user: null,
+      adminAccess: false,
       cvs: [],
       pubs: []
     };
   },
-  mounted() {
-    const raw = localStorage.getItem('laraveluser');
-    if (raw) {
-      try { this.user = JSON.parse(raw); } catch(e) { this.user = null; }
-    }
-    if (!this.isAdmin) {
+  async mounted() {
+    this.user = currentUser();
+    this.adminAccess = await isAdmin(this.user);
+    if (!this.adminAccess) {
       // if not admin, redirect to home
       this.$router.replace({ name: 'Home' });
     }
@@ -115,18 +121,13 @@ export default {
   },
   computed: {
     isAdmin() {
-      const u = this.user;
-      if (!u) return false;
-      return (
-        u.is_admin === 1 || u.is_admin === true || u.isAdmin === true ||
-        u.admin === 1 || u.admin === true || u.role === 'admin' || u.type === 'admin'
-      );
+      return this.adminAccess;
     }
   },
   methods: {
-    logout() {
+    async logout() {
       if (confirm('Are you sure you want to logout?')) {
-        localStorage.removeItem('laraveluser');
+        await firebaseLogout();
         this.$router.push({ name: 'login' });
       }
     },
@@ -144,24 +145,11 @@ export default {
         return; 
       }
       
-      const fd = new FormData(); 
-      fd.append('cv_file', this.cvFile);
-      if (this.cvTitle) {
-        fd.append('title', this.cvTitle);
-      }
-      
-      const headers = {};
-      if (this.user) { 
-        const token = this.user.token || this.user.access_token || this.user.api_token; 
-        if (token) headers.Authorization = 'Bearer ' + token; 
-      }
-      
       this.msg = 'Uploading...';
       this.msgType = 'success';
-      
-  api.post('/api/documents', fd, { headers })
-        .then(r => { 
-          this.msg = r.data.msg || 'CV uploaded successfully!'; 
+      uploadDocument(this.cvFile, this.cvTitle, 'cv', this.user.uid)
+        .then(() => {
+          this.msg = 'CV uploaded successfully!';
           this.msgType = 'success';
           this.cvTitle = '';
           this.cvFile = null;
@@ -169,8 +157,10 @@ export default {
           
           this.fetchCvList();
         })
-        .catch(() => { 
-          this.msg = 'Upload failed. Please try again.'; 
+        .catch(error => {
+          this.msg = error.code === 'storage/unauthorized'
+            ? 'Firebase Storage is unavailable or not enabled. Upgrade the Firebase project to Blaze, enable Storage, and publish Storage rules.'
+            : 'Upload failed. Please try again.';
           this.msgType = 'error';
         });
     },
@@ -186,24 +176,11 @@ export default {
         return; 
       }
       
-      const fd = new FormData(); 
-      fd.append('publication_file', this.pubFile);
-      if (this.pubTitle) {
-        fd.append('title', this.pubTitle);
-      }
-      
-      const headers = {};
-      if (this.user) { 
-        const token = this.user.token || this.user.access_token || this.user.api_token; 
-        if (token) headers.Authorization = 'Bearer ' + token; 
-      }
-      
       this.msgPub = 'Uploading...';
       this.msgPubType = 'success';
-      
-  api.post('/api/documents', fd, { headers })
-        .then(r => { 
-          this.msgPub = r.data.msg || 'Publication uploaded successfully!'; 
+      uploadDocument(this.pubFile, this.pubTitle, 'publication', this.user.uid)
+        .then(() => {
+          this.msgPub = 'Publication uploaded successfully!';
           this.msgPubType = 'success';
           this.pubTitle = '';
           this.pubFile = null;
@@ -211,51 +188,32 @@ export default {
           // Refresh the publications list
           this.fetchPubList();
         })
-        .catch(() => { 
-          this.msgPub = 'Upload failed. Please try again.'; 
+        .catch(error => {
+          this.msgPub = error.code === 'storage/unauthorized'
+            ? 'Firebase Storage is unavailable or not enabled. Upgrade the Firebase project to Blaze, enable Storage, and publish Storage rules.'
+            : 'Upload failed. Please try again.';
           this.msgPubType = 'error';
         });
     },
     fetchCvList() {
-      const headers = {};
-      if (this.user) { 
-        const token = this.user.token || this.user.access_token || this.user.api_token; 
-        if (token) headers.Authorization = 'Bearer ' + token; 
-      }
-      
-  api.get('/api/documents', { headers })
-        .then(res => {
-          // normalize to array
-          this.cvs = Array.isArray(res.data) ? res.data : (res.data ? [res.data] : []);
-        }).catch(() => { 
+      listDocuments('cv').then(documents => {
+          this.cvs = documents;
+        }).catch(() => {
           this.cvs = []; 
         });
     },
     fetchPubList() {
-      const headers = {};
-      if (this.user) { 
-        const token = this.user.token || this.user.access_token || this.user.api_token; 
-        if (token) headers.Authorization = 'Bearer ' + token; 
-      }
-      
-  api.get('/api/documents', { headers })
-        .then(res => {
-          this.pubs = Array.isArray(res.data) ? res.data : (res.data ? [res.data] : []);
-        }).catch(() => { 
+      listDocuments('publication').then(documents => {
+          this.pubs = documents;
+        }).catch(() => {
           this.pubs = []; 
         });
     },
     deleteCv(id, index) {
       if (!confirm('Are you sure you want to delete this CV?')) return;
       
-      const headers = {};
-      if (this.user) { 
-        const token = this.user.token || this.user.access_token || this.user.api_token; 
-        if (token) headers.Authorization = 'Bearer ' + token; 
-      }
-      
-      api.delete(`/api/documents/${id}`, { headers })
-        .then(() => { 
+      removeDocument(this.cvs[index])
+        .then(() => {
           this.cvs.splice(index, 1); 
           this.msg = 'CV deleted successfully';
           this.msgType = 'success';
@@ -268,14 +226,8 @@ export default {
     deletePub(id, index) {
       if (!confirm('Are you sure you want to delete this publication?')) return;
       
-      const headers = {};
-      if (this.user) { 
-        const token = this.user.token || this.user.access_token || this.user.api_token; 
-        if (token) headers.Authorization = 'Bearer ' + token; 
-      }
-      
-      api.delete(`/api/documents/${id}`, { headers })
-        .then(() => { 
+      removeDocument(this.pubs[index])
+        .then(() => {
           this.pubs.splice(index, 1); 
           this.msgPub = 'Publication deleted successfully';
           this.msgPubType = 'success';

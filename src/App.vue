@@ -82,12 +82,15 @@ body {
 
 /* Theme variables: light defaults */
 :root {
-  --bg: #ffffff;
-  --surface: rgba(255,255,255,0.85);
-  --text: #1f2937;
-  --muted: #6b7280;
-  --accent: #2563eb;
-  --card-bg: rgba(255,255,255,0.9);
+  --bg: #f6f8f7;
+  --surface: #ffffff;
+  --text: #17343a;
+  --muted: #60777a;
+  --accent: #147d78;
+  --accent-dark: #0d5756;
+  --line: #d9e5e2;
+  --card-bg: #ffffff;
+  --warm: #eef4f1;
 }
 
 /* Dark theme overrides (when document.documentElement has .dark) */
@@ -101,11 +104,13 @@ body {
 }
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: var(--text);
+  background: var(--bg);
+  text-align: left;
 }
 
 #content {
@@ -147,8 +152,17 @@ footer, .my-footer {
   background: var(--card-bg);
 }
 
-button:not(.btn-login), a { 
+button:not(.btn-login), a {
   color: var(--accent); 
+}
+
+button, a {
+  font-family: inherit;
+}
+
+::selection {
+  background: #b9ded7;
+  color: var(--accent-dark);
 }
 
 

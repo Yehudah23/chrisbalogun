@@ -3,8 +3,10 @@ import HomeView from '../views/Home.vue';
 import LogIn from '../components/LogIn.vue';
 import MyCv from '../components/MyCv.vue';
 import MyPublications from '../components/MyPublications.vue';
+import ContactMe from '../components/ContactMe.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import AdminView from '../views/Admin.vue';
+import { authReady, currentUser, isAdmin } from '../services/firebase';
 
 
 
@@ -24,7 +26,7 @@ const routes = [
     },
     {
         path: '/contact',
-        component: AboutMe,
+        component: ContactMe,
         name: 'contact'
     },
     {
@@ -47,44 +49,7 @@ const routes = [
         path: '/admin',
         component: AdminView,
         name: 'admin',
-        meta: { requiresAdmin: true },
-        beforeEnter: (to, from, next) => {
-            const raw = localStorage.getItem('laraveluser');
-            
-            // Redirect to login if not authenticated
-            if (!raw) {
-                return next({ name: 'login' });
-            }
-            
-            let user = null;
-            try { 
-                user = JSON.parse(raw); 
-            } catch(e) { 
-                // Invalid token, clear it and redirect
-                localStorage.removeItem('laraveluser');
-                return next({ name: 'login' });
-            }
-            
-            // Check if user is admin
-            const isAdmin = user && (
-                user.is_admin === 1 || 
-                user.is_admin === true || 
-                user.isAdmin === true || 
-                user.admin === 1 || 
-                user.admin === true || 
-                user.role === 'admin' || 
-                user.type === 'admin'
-            );
-            
-            // Redirect non-admin users
-            if (!isAdmin) {
-                console.warn('Access denied: User is not an administrator');
-                return next({ name: 'login' });
-            }
-            
-            // Allow access for admin users
-            return next();
-        }
+        meta: { requiresAdmin: true }
     }
 ];
 
@@ -95,35 +60,18 @@ const router = createRouter({
     routes
 });
 
-// Global navigation guard
-router.beforeEach((to, from, next) => {
-    const raw = localStorage.getItem('laraveluser');
-    let user = null;
-    
-    if (raw) {
-        try {
-            user = JSON.parse(raw);
-        } catch(e) {
-            localStorage.removeItem('laraveluser');
-        }
+router.beforeEach(async (to, from, next) => {
+    if (!to.meta.requiresAdmin) {
+        return next();
     }
-    
-    // Check if user is admin
-    const isAdmin = user && (
-        user.is_admin === 1 || 
-        user.is_admin === true || 
-        user.isAdmin === true || 
-        user.admin === 1 || 
-        user.admin === true || 
-        user.role === 'admin' || 
-        user.type === 'admin'
-    );
-    
-    // If logged in admin tries to access login page, redirect to admin
-    if (to.meta.requiresGuest && isAdmin) {
-        return next({ name: 'admin' });
+
+    await authReady;
+    const user = currentUser();
+    const admin = user && await isAdmin(user);
+
+    if (!user || !admin) {
+        return next({ name: 'login' });
     }
-    
     next();
 });
 

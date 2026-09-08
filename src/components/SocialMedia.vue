@@ -82,10 +82,9 @@ export default {
 
 <style scoped>
 .social-profile {
-  background: linear-gradient(to bottom right, #f3f6fd 0%, #e9f0fb 100%);
-  padding: 2rem 0;
-  border-radius: 1rem;
-  margin: 1rem 0;
+  background: var(--accent-dark);
+  padding: 2.2rem 0;
+  margin: 0;
 }
 
 .profile-header {
@@ -95,30 +94,30 @@ export default {
   justify-content: center;
   max-width: 1100px;
   margin: 0 auto;
-  gap: 2rem;
+  gap: 2.5rem;
   padding: 0 1.5rem;
 }
 
 .profile-avatar {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: #007bff;
+  width: 92px;
+  height: 92px;
+  border: 1px solid rgba(255,255,255,0.55);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 20px rgba(0, 123, 255, 0.2);
 }
 
 .profile-initial {
-  font-size: 3rem;
-  font-weight: bold;
+  font-family: Georgia, serif;
+  font-size: 2.5rem;
+  font-weight: 400;
   color: white;
 }
 
 .profile-info {
   flex: 1;
-  min-width: 280px;
+  min-width: 0;
+  width: 100%;
   max-width: 600px;
   text-align: left;
 }
@@ -126,61 +125,63 @@ export default {
 .profile-name {
   font-size: 2.2rem;
   font-weight: bold;
-  color: #2a2a2a;
+  color: #fff !important;
   margin-bottom: 0.3rem;
 }
 
 .profile-title {
   font-size: 1.3rem;
-  color: #007bff;
+  color: #b9ded7 !important;
   margin-bottom: 1rem;
 }
 
 .profile-bio {
   font-size: 1.1rem;
-  color: #555;
+  color: rgba(255,255,255,0.78) !important;
   margin-bottom: 1.5rem;
   line-height: 1.5;
 }
 
 .social-links {
   display: flex;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
   margin-bottom: 1.5rem;
 }
 
 .social-link {
   display: inline-flex;
   align-items: center;
-  padding: 0.6rem 1.2rem;
-  border-radius: 25px;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid rgba(255,255,255,0.28);
+  border-radius: 2px;
   text-decoration: none;
   font-weight: 500;
   transition: all 0.2s ease;
 }
 
 .github {
-  background: #24292e;
+  background: transparent;
   color: white !important;
 }
 
 .linkedin {
-  background: #0077b5;
+  background: transparent;
   color: white !important;
 }
 
 .twitter {
-  background: #1DA1F2;
+  background: transparent;
   color: white !important;
 }
 
 .instagram {
-  background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+  background: transparent;
   color: white !important;
 }
 
 .facebook {
-  background: #4267B2;
+  background: transparent;
   color: white !important;
 }
 
@@ -190,8 +191,8 @@ export default {
 }
 
 .social-link:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #b9ded7;
+  transform: translateY(-2px);
 }
 
 .social-icon {

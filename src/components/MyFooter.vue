@@ -32,8 +32,8 @@ export default {
 
 <style scoped>
 .footer-section {
-  background: #f8fafc;
-  border-top: 1px solid #e5e5e5;
+  background: var(--accent-dark);
+  border-top: 1px solid var(--accent-dark);
   padding: 2rem 0 1rem 0;
   font-size: 1rem;
 }
@@ -56,7 +56,7 @@ export default {
   gap: 0.7rem;
   font-weight: bold;
   font-size: 1.2rem;
-  color: #007bff;
+  color: #fff !important;
 }
 .footer-logo {
   font-size: 1.7rem;
@@ -66,13 +66,13 @@ export default {
   gap: 1.2rem;
 }
 .footer-link {
-  color: #007bff;
+  color: #b9ded7 !important;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s;
 }
 .footer-link:hover {
-  color: #0056b3;
+  color: #fff;
 }
 .footer-bottom {
   display: flex;
@@ -80,10 +80,10 @@ export default {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid rgba(255,255,255,0.2);
   padding-top: 1rem;
   font-size: 0.97rem;
-  color: #555;
+  color: rgba(255,255,255,0.7) !important;
 }
 .footer-social {
   display: flex;
@@ -91,12 +91,12 @@ export default {
 }
 .footer-social-icon {
   font-size: 1.3rem;
-  color: #007bff;
+  color: #b9ded7 !important;
   text-decoration: none;
   transition: color 0.2s;
 }
 .footer-social-icon:hover {
-  color: #0056b3;
+  color: #fff;
 }
 @media (max-width: 700px) {
   .footer-main, .footer-bottom {

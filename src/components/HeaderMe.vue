@@ -1,12 +1,15 @@
 <template>
   <header class="navbar">
     <div class="navbar-container">
-      <div class="navbar-brand">Mr.Chris Balogun</div>
+      <a href="/" class="navbar-brand" @click.prevent="$router.push({ name: 'Home' })">
+        <span class="brand-mark">CB</span>
+        <span><strong>Chris Balogun</strong><small>Biotechnology research</small></span>
+      </a>
       <nav :class="['navbar-links', { open: isMenuOpen }]">
-        <a href="about" @click.prevent="scrollToSection('about')">About</a>
-        <a href="cv" @click.prevent="scrollToSection('cv')">CV</a>
-        <a href="publications" @click.prevent="scrollToSection('publications')">Publications</a>
-        <a href="contact" @click.prevent="scrollToSection('contact')">Contact</a>
+        <router-link :to="{ name: 'about' }" @click="closeMenu">About</router-link>
+        <router-link :to="{ name: 'cv' }" @click="closeMenu">CV</router-link>
+        <router-link :to="{ name: 'publications' }" @click="closeMenu">Publications</router-link>
+        <router-link :to="{ name: 'contact' }" @click="closeMenu">Contact</router-link>
   <a href="#" class="login-link" @click.prevent="openLogin">Admin Login</a>
       </nav>
       <button class="navbar-toggle" @click="toggleMenu">
@@ -31,17 +34,7 @@ export default {
     closeMenu() {
       this.isMenuOpen = false;
     },
-    scrollToSection(sectionId) {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-        this.closeMenu();
-      }
-    }
-    ,
     openLogin() {
-      // Clear any stored session so login always requires password
-      try { localStorage.removeItem('laraveluser'); } catch (e) { /* ignore */ }
       this.closeMenu();
       this.$router.push({ name: 'login' });
     }
@@ -51,8 +44,8 @@ export default {
 
 <style scoped>
 .navbar {
-  background: #fff;
-  border-bottom: 1px solid #e5e5e5;
+  background: rgba(246, 248, 247, 0.94);
+  border-bottom: 1px solid var(--line);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -63,38 +56,68 @@ export default {
   justify-content: space-between;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 0.75rem 1.5rem;
+  padding: 1rem 1.5rem;
 }
 .navbar-brand {
-  font-weight: bold;
-  font-size: 1.3rem;
-  color: #007bff;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: var(--text) !important;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+}
+.navbar-brand strong, .navbar-brand small {
+  display: block;
+}
+.navbar-brand strong {
+  font-family: Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+.navbar-brand small {
+  color: var(--muted);
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 2.3rem;
+  height: 2.3rem;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
 }
 .navbar-links {
   display: flex;
-  gap: 1.5rem;
+  align-items: center;
+  gap: 1.7rem;
 }
 .navbar-links a {
-  color: #333;
+  color: var(--text);
   text-decoration: none;
-  font-weight: 500;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   transition: color 0.2s;
 }
 .navbar-links a:hover {
-  color: #007bff;
+  color: var(--accent);
 }
 .navbar-links .login-link {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--accent-dark);
   color: white !important;
-  padding: 0.5rem 1.2rem;
-  border-radius: 6px;
+  padding: 0.65rem 1rem;
+  border-radius: 2px;
   font-weight: 600;
   transition: all 0.3s ease;
 }
 .navbar-links .login-link:hover {
   color: white !important;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 5px 14px rgba(13, 87, 86, 0.18);
 }
 .navbar-toggle {
   display: none;

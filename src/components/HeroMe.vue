@@ -2,14 +2,15 @@
   <section class="hero-section">
     <div class="hero-container">
       <div class="hero-content">
+        <p class="hero-kicker">Independent research portfolio <span></span> 2024—present</p>
         <h1 class="hero-title">Mr. Chris Balogun</h1>
         <h2 class="hero-subtitle">Biotechnology Research Scientist</h2>
         <p class="hero-lead">
           Advancing the frontiers of biotechnology through innovative research in molecular biology, genetics, and sustainable solutions for the future.
         </p>
         <div class="hero-actions">
-          <button class="btn btn-primary" @click="scrollToSection('publications')">View Publications</button>
-          <button class="btn btn-outline-primary" @click="scrollToSection('contact')">Get in Touch</button>
+          <button class="btn btn-primary" @click="scrollToSection('publications')">Explore research <span>↗</span></button>
+          <button class="btn btn-outline-primary" @click="goToContact">Get in touch</button>
         </div>
       </div>
       <div class="hero-image-wrapper">
@@ -36,6 +37,9 @@ export default {
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
       }
+    },
+    goToContact() {
+      this.$router.push({ name: 'contact' });
     }
   }
 };
@@ -43,46 +47,68 @@ export default {
 
 <style scoped>
 .hero-section {
-  background: linear-gradient(to bottom right, #f3f6fd 0%, #e9f0fb 100%);
-  padding: 3rem 0 2rem 0;
+  background: var(--bg);
+  padding: 5.5rem 1.5rem 5rem;
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
 }
 .hero-container {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  max-width: 1200px;
+  max-width: 1160px;
   margin: 0 auto;
-  gap: 2rem;
+  gap: 5rem;
 }
 .hero-content {
   flex: 1 1 350px;
   min-width: 300px;
-  max-width: 500px;
+  max-width: 590px;
+}
+.hero-kicker {
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 1.4rem;
+}
+.hero-kicker span {
+  display: inline-block;
+  width: 2rem;
+  height: 1px;
+  margin: 0 0.6rem 0.25rem;
+  background: var(--accent);
 }
 .hero-title {
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #2a2a2a;
+  font-family: Georgia, serif;
+  font-size: clamp(3.2rem, 6vw, 5.8rem);
+  line-height: 0.98;
+  font-weight: 400;
+  letter-spacing: -0.04em;
   margin-bottom: 0.5rem;
 }
 .hero-subtitle {
   font-size: 1.3rem;
-  color: #007bff;
+  color: var(--accent-dark);
+  font-family: Georgia, serif;
+  font-weight: 400;
   margin-bottom: 1.2rem;
 }
 .hero-lead {
   font-size: 1.1rem;
-  color: #555;
+  color: var(--muted);
+  line-height: 1.8;
   margin-bottom: 2rem;
 }
 .hero-actions {
   display: flex;
-  gap: 1rem;
+  gap: 0.8rem;
 }
 .btn {
   padding: 0.6rem 1.4rem;
-  border-radius: 25px;
+  border-radius: 2px;
   font-size: 1rem;
   font-weight: 500;
   border: none;
@@ -90,23 +116,25 @@ export default {
   transition: background 0.2s, color 0.2s;
 }
 .btn-primary {
-  background: #007bff;
+  background: var(--accent-dark);
   color: #fff;
 }
 .btn-primary:hover {
-  background: #0056b3;
+  background: var(--accent);
 }
 .btn-outline-primary {
   background: #fff;
-  color: #007bff;
-  border: 2px solid #007bff;
+  color: var(--accent-dark);
+  border: 1px solid var(--accent-dark);
 }
 .btn-outline-primary:hover {
-  background: #007bff;
+  background: var(--accent-dark);
   color: #fff;
 }
 .hero-image-wrapper {
   flex: 1 1 300px;
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -115,8 +143,9 @@ export default {
 .hero-image {
   max-width: 350px;
   width: 100%;
-  border-radius: 1.5rem;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  display: block;
+  border-radius: 2px;
+  box-shadow: 18px 18px 0 #d7e7e2;
   object-fit: cover;
 }
 @media (max-width: 900px) {
@@ -125,7 +154,7 @@ export default {
     gap: 2.5rem;
   }
   .hero-image {
-    max-width: 90vw;
+    max-width: min(350px, 100%);
   }
 }
 

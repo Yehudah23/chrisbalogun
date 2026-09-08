@@ -15,7 +15,7 @@
 </template>
 
 <script >
-import api from '@/services/api'
+import { register } from '@/services/firebase'
 
 export default{
     data(){
@@ -29,8 +29,8 @@ export default{
         }
     },
     methods:{   
-        register(){
-            let data = {
+        async register(){
+            const data = {
                 fullname: this.fullname,
                 email: this.email,
                 password: this.password,
@@ -38,31 +38,15 @@ export default{
                 role: this.role
             }
         
-             api.post('/api/register', data)
-        .then(response => {
-            console.log(response.data);
-            if(response.data.status==201){
-                this.msg=response.data.msg
-            } 
-           else if(response.data.status==202){
-                this.msg=response.data.msg
-            } 
-        else if(response.data.status==204){
-                this.msg=response.data.msg
-                setTimeout(() => {
-                    this.$router.push({name:'login'})
-                }, 2000);
-
-            } 
-           else if(response.data.status==501){
-                this.msg=response.data.msg
-            } else{
-                this.msg='Registration failed'
+            try {
+                await register(data);
+                this.msg = 'Registration successful';
+                setTimeout(() => this.$router.push({ name: 'login' }), 700);
+            } catch (error) {
+                this.msg = error.code === 'auth/email-already-in-use'
+                    ? 'That email is already registered.'
+                    : 'Registration failed';
             }
-        })
-        .catch(error => {
-            console.log(error);
-        })
         }
        
 }

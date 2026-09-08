@@ -29,7 +29,7 @@
         </div>
         
         <div v-else class="cv-empty">
-          <p>No CV documents are currently available.</p>
+          <p>{{ loadError || 'No CV documents are currently available.' }}</p>
           <p v-if="isAdmin" class="admin-note">Please visit the admin panel to upload CV documents.</p>
         </div>
       </div>
@@ -38,12 +38,14 @@
 </template>
 
 <script>
-import api from '@/services/api';
+import { currentUser, isAdmin, listDocuments } from '@/services/firebase';
 export default {
   data() {
     return {
       uploadedFileUrl: [],
-      user: null
+      user: null,
+      adminAccess: false,
+      loadError: ''
     };
   },
   computed: {
@@ -51,47 +53,29 @@ export default {
       const u = this.user;
       if (!u) return false;
       return (
-        u.is_admin === 1 ||
-        u.is_admin === true ||
-        u.isAdmin === true ||
-        u.admin === 1 ||
-        u.admin === true ||
-        u.role === 'admin' ||
-        u.type === 'admin'
+        this.adminAccess
       );
     }
   },
-  mounted() {
-    // parse user
-    const raw = localStorage.getItem('laraveluser');
-    if (raw) {
-      try { this.user = JSON.parse(raw); } catch (e) { this.user = null; }
-    }
+  async mounted() {
+    this.user = currentUser();
+    this.adminAccess = await isAdmin(this.user);
 
     // fetch existing uploaded CV(s)
     this.fetchCvList();
   },
   methods: {
     fetchCvList() {
-      const headers = {};
-      if (this.user) {
-        const token = this.user.token || this.user.access_token || this.user.api_token;
-        if (token) headers.Authorization = 'Bearer ' + token;
-      }
-      
-  api.get('/api/documents', { headers })
-        .then(res => {
-          if (!res || !res.data) return;
-          if (Array.isArray(res.data)) {
-            this.uploadedFileUrl = res.data
-              .map(item => ({ file_url: item.file_url || item.url, title: item.title || item.name || 'CV Document' }))
-              .filter(i => i.file_url);
-          } else {
-            const url = res.data.file_url || res.data.url || '';
-            if (url) this.uploadedFileUrl = [{ file_url: url, title: res.data.title || 'CV Document' }];
-          }
+      listDocuments('cv')
+        .then(documents => {
+          this.uploadedFileUrl = documents
+            .map(item => ({ file_url: item.file_url, title: item.title || 'CV Document' }))
+            .filter(item => item.file_url);
         })
-        .catch(() => { this.uploadedFileUrl = []; });
+        .catch(error => {
+          this.uploadedFileUrl = [];
+          this.loadError = error.message || 'Unable to load CV documents.';
+        });
     },
     isImage(url) { 
       return url && (url.endsWith('.jpg') || url.endsWith('.jpeg') || url.endsWith('.png') || url.endsWith('.gif')); 
@@ -102,16 +86,15 @@ export default {
 
 <style scoped>
 .cv-section {
-  background: #f8fafc;
-  padding: 3rem 0 2rem 0;
+  background: #fff;
+  padding: 6rem 1.5rem;
+  border-top: 1px solid var(--line);
 }
 .cv-container {
-  max-width: 900px;
+  max-width: 1160px;
   margin: 0 auto;
-  background: #fff;
-  border-radius: 1.5rem;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-  padding: 2.5rem 2rem 2rem 2rem;
+  background: transparent;
+  padding: 0;
 }
 .cv-content {
   display: flex;
@@ -119,14 +102,15 @@ export default {
   align-items: center;
 }
 .cv-title {
-  font-size: 2.2rem;
-  font-weight: bold;
-  color: #2a2a2a;
+  font-family: Georgia, serif;
+  font-size: 3rem;
+  font-weight: 400;
+  color: var(--text);
   margin-bottom: 0.5rem;
 }
 .cv-description {
   font-size: 1.1rem;
-  color: #666;
+  color: var(--muted);
   margin-bottom: 2rem;
   text-align: center;
   max-width: 600px;
@@ -142,10 +126,10 @@ export default {
   max-width: 350px;
 }
 .cv-file-card {
-  background: #f9f9f9;
-  border-radius: 1rem;
+  background: var(--warm);
+  border: 1px solid var(--line);
+  border-radius: 2px;
   overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 .cv-file-card:hover {
@@ -163,7 +147,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f0f4f9;
+  background: #e2efeb;
   border-bottom: 1px solid #eee;
 }
 .file-icon {
@@ -181,15 +165,15 @@ export default {
 .cv-download-btn {
   display: inline-block;
   padding: 0.5rem 1.2rem;
-  background: #007bff;
+  background: var(--accent-dark);
   color: white !important;
-  border-radius: 20px;
+  border-radius: 2px;
   text-decoration: none;
   font-weight: 500;
   transition: background 0.2s;
 }
 .cv-download-btn:hover {
-  background: #0056b3;
+  background: var(--accent);
 }
 .cv-empty {
   text-align: center;

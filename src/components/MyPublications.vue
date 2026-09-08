@@ -28,7 +28,7 @@
         </div>
         
         <div v-else class="pub-empty">
-          <p>No publications are currently available.</p>
+          <p>{{ loadError || 'No publications are currently available.' }}</p>
           <p v-if="isAdmin" class="admin-note">Please visit the admin panel to upload publications.</p>
         </div>
       </div>
@@ -37,12 +37,14 @@
 </template>
 
 <script>
-import api from '@/services/api';
+import { currentUser, isAdmin, listDocuments } from '@/services/firebase';
 export default {
   data() {
     return {
       uploadedFileUrl: [],
-      user: null
+      user: null,
+      adminAccess: false,
+      loadError: ''
     };
   },
   computed: {
@@ -50,46 +52,31 @@ export default {
       const u = this.user;
       if (!u) return false;
       return (
-        u.is_admin === 1 || u.is_admin === true || u.isAdmin === true ||
-        u.admin === 1 || u.admin === true || u.role === 'admin' || u.type === 'admin'
+        this.adminAccess
       );
     }
   },
-  mounted() {
-    const raw = localStorage.getItem('laraveluser');
-    if (raw) {
-      try { this.user = JSON.parse(raw); } catch (e) { this.user = null; }
-    }
+  async mounted() {
+    this.user = currentUser();
+    this.adminAccess = await isAdmin(this.user);
     
     this.fetchPublications();
   },
   methods: {
     fetchPublications() {
-      const headers = {};
-      if (this.user) {
-        const token = this.user.token || this.user.access_token || this.user.api_token;
-        if (token) headers.Authorization = 'Bearer ' + token;
-      }
-      
-  api.get('/api/documents', { headers })
-        .then(res => {
-          if (!res || !res.data) return;
-          if (Array.isArray(res.data)) {
-            this.uploadedFileUrl = res.data
-              .map(item => ({ 
-                file_url: item.file_url || item.url, 
-                title: item.title || item.name || 'Research Publication' 
-              }))
-              .filter(i => i.file_url);
-          } else {
-            const url = res.data.file_url || res.data.url || '';
-            if (url) this.uploadedFileUrl = [{ 
-              file_url: url, 
-              title: res.data.title || 'Research Publication' 
-            }];
-          }
+      listDocuments('publication')
+        .then(documents => {
+          this.uploadedFileUrl = documents
+            .map(item => ({
+              file_url: item.file_url,
+              title: item.title || 'Research Publication'
+            }))
+            .filter(item => item.file_url);
         })
-        .catch(() => { this.uploadedFileUrl = []; });
+        .catch(error => {
+          this.uploadedFileUrl = [];
+          this.loadError = error.message || 'Unable to load publications.';
+        });
     },
     isImage(url) { 
       return url && (url.endsWith('.jpg') || url.endsWith('.jpeg') || url.endsWith('.png') || url.endsWith('.gif')); 
@@ -100,16 +87,14 @@ export default {
 
 <style scoped>
 .pub-section {
-  background: #f8fafc;
-  padding: 3rem 0 2rem 0;
+  background: var(--bg);
+  padding: 6rem 1.5rem;
 }
 .pub-container {
-  max-width: 1100px;
+  max-width: 1160px;
   margin: 0 auto;
-  background: #fff;
-  border-radius: 1.5rem;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-  padding: 2.5rem 2rem 2rem 2rem;
+  background: transparent;
+  padding: 0;
 }
 .pub-content {
   display: flex;
@@ -117,14 +102,15 @@ export default {
   align-items: center;
 }
 .pub-title {
-  font-size: 2.2rem;
-  font-weight: bold;
-  color: #2a2a2a;
+  font-family: Georgia, serif;
+  font-size: 3rem;
+  font-weight: 400;
+  color: var(--text);
   margin-bottom: 0.5rem;
 }
 .pub-description {
   font-size: 1.1rem;
-  color: #666;
+  color: var(--muted);
   margin-bottom: 2rem;
   text-align: center;
   max-width: 600px;
@@ -137,9 +123,8 @@ export default {
 }
 .pub-card {
   background: #fff;
-  border-radius: 1rem;
+  border: 1px solid var(--line);
   overflow: hidden;
-  box-shadow: 0 2px 15px rgba(0,0,0,0.05);
   transition: transform 0.2s, box-shadow 0.2s;
   height: 100%;
   display: flex;
@@ -185,16 +170,16 @@ export default {
   align-items: center;
   justify-content: space-between;
   padding: 0.6rem 1rem;
-  background: #007bff;
+  background: var(--accent-dark);
   color: white !important;
-  border-radius: 0.5rem;
+  border-radius: 2px;
   text-decoration: none;
   font-weight: 500;
   transition: background 0.2s;
   margin-top: auto;
 }
 .pub-link:hover {
-  background: #0056b3;
+  background: var(--accent);
 }
 .pub-link-text, .pub-link-icon {
   color: white !important;

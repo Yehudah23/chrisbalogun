@@ -15,6 +15,24 @@ npm run serve
 npm run build
 ```
 
+## Firebase setup
+
+Create a Firebase project, enable Email/Password Authentication, Firestore, and
+Cloud Storage. Copy `.env.development.local.example` to `.env.development.local`
+and fill in the Firebase web app values. Set `VUE_APP_FIREBASE_ADMIN_EMAIL` to
+the administrator email used by the site.
+
+Create the administrator account through Firebase Authentication, then set its
+Firestore document at `users/<uid>` to `{ "role": "admin" }`. Deploy the rules
+in `firestore.rules` and `storage.rules` before allowing uploads. New accounts
+created by the signup screen are always regular users.
+
+After authenticating with the Firebase CLI, deploy the rules from this project:
+
+```bash
+npm run deploy:rules
+```
+
 ### Lints and fixes files
 ```
 npm run lint

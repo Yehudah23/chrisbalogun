@@ -54,20 +54,24 @@ export default {
 
 <style scoped>
 .about-section {
-  background: #f8fafc;
-  padding: 3rem 0 2rem 0;
+  background: #fff;
+  padding: 6rem 1.5rem;
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
 }
 .about-container {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: center;
-  max-width: 1100px;
+  max-width: 1160px;
   margin: 0 auto;
-  gap: 2.5rem;
+  gap: 5rem;
 }
 .about-image-wrapper {
   flex: 1 1 320px;
+  position: relative;
+  z-index: 1;
   min-width: 250px;
   display: flex;
   align-items: center;
@@ -76,8 +80,9 @@ export default {
 .about-image {
   max-width: 350px;
   width: 100%;
-  border-radius: 1.5rem;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  display: block;
+  border-radius: 2px;
+  box-shadow: -16px 16px 0 #d7e7e2;
   object-fit: cover;
 }
 .about-content {
@@ -85,46 +90,50 @@ export default {
   min-width: 300px;
 }
 .about-title {
-  font-size: 2.2rem;
-  font-weight: bold;
-  color: #2a2a2a;
+  font-family: Georgia, serif;
+  font-size: 3rem;
+  font-weight: 400;
+  color: var(--text);
   margin-bottom: 0.5rem;
 }
 .about-lead {
   font-size: 1.1rem;
-  color: #555;
+  color: var(--muted);
+  line-height: 1.8;
   margin-bottom: 1.5rem;
 }
 .about-subtitle {
   font-size: 1.2rem;
-  color: #007bff;
+  color: var(--accent-dark);
+  font-family: Georgia, serif;
+  font-weight: 400;
   margin-bottom: 0.7rem;
   margin-top: 1.2rem;
 }
 .about-text {
-  color: #666;
+  color: var(--muted);
+  line-height: 1.75;
   margin-bottom: 1rem;
 }
 .about-expertise {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.2rem;
+  gap: 0.8rem;
   margin: 2rem 0 1rem 0;
 }
 .about-expertise-item {
   display: flex;
   align-items: flex-start;
   gap: 0.7rem;
-  background: #fff;
-  border-radius: 1rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  padding: 1rem 1.2rem;
+  background: var(--warm);
+  border-left: 3px solid var(--accent);
+  padding: 1rem;
   min-width: 180px;
   flex: 1 1 180px;
 }
 .about-expertise-icon {
-  font-size: 2rem;
-  color: #007bff;
+  font-size: 1.5rem;
+  color: var(--accent);
   margin-top: 0.1rem;
 }
 .about-expertise-title {
@@ -134,7 +143,7 @@ export default {
 }
 .about-expertise-desc {
   font-size: 0.97rem;
-  color: #555;
+  color: var(--muted);
 }
 @media (max-width: 900px) {
   .about-container {
@@ -142,7 +151,7 @@ export default {
     gap: 2.5rem;
   }
   .about-image {
-    max-width: 90vw;
+    max-width: min(350px, 100%);
   }
 }
 </style>
