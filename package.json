@@ -7,6 +7,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "deploy:rules": "npx --yes --package=firebase-tools firebase deploy --only firestore:rules,storage",
+    "configure:storage-cors": "gcloud storage buckets update gs://royalsandnobles-546e7.firebasestorage.app --cors-file=storage.cors.json",
     "optimize-images": "npx imagemin \"src/assets/*.{jpg,jpeg,png}\" --out-dir=src/assets"
   },
   "dependencies": {

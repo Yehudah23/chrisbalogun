@@ -33,6 +33,18 @@ After authenticating with the Firebase CLI, deploy the rules from this project:
 npm run deploy:rules
 ```
 
+Storage uploads from local development also require the bucket CORS policy. If
+the browser reports a failed CORS preflight, install and authenticate the Google
+Cloud CLI, then run:
+
+```bash
+gcloud auth login
+npm run configure:storage-cors
+```
+
+The policy is in `storage.cors.json`. Add the deployed website origin to that
+file before applying it in production.
+
 ### Lints and fixes files
 ```
 npm run lint
