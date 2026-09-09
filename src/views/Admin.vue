@@ -160,7 +160,7 @@ export default {
         .catch(error => {
           this.msg = error.code === 'storage/unauthorized'
             ? 'Firebase Storage is unavailable or not enabled. Upgrade the Firebase project to Blaze, enable Storage, and publish Storage rules.'
-            : 'Upload failed. Please try again.';
+            : (error.message || 'Upload failed. Please try again.');
           this.msgType = 'error';
         });
     },
@@ -191,7 +191,7 @@ export default {
         .catch(error => {
           this.msgPub = error.code === 'storage/unauthorized'
             ? 'Firebase Storage is unavailable or not enabled. Upgrade the Firebase project to Blaze, enable Storage, and publish Storage rules.'
-            : 'Upload failed. Please try again.';
+            : (error.message || 'Upload failed. Please try again.');
           this.msgPubType = 'error';
         });
     },

@@ -16,13 +16,6 @@ import {
   serverTimestamp,
   setDoc,
 } from 'firebase/firestore';
-import {
-  deleteObject,
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytes
-} from 'firebase/storage';
 import { getFirestore } from 'firebase/firestore';
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
@@ -46,11 +39,19 @@ const firebaseConfigured = Boolean(
 const firebaseApp = firebaseConfigured ? initializeApp(firebaseConfig) : null;
 const auth = firebaseApp ? getAuth(firebaseApp) : null;
 const db = firebaseApp ? getFirestore(firebaseApp) : null;
-const storage = firebaseApp ? getStorage(firebaseApp) : null;
+
+const cloudinaryCloudName = process.env.VUE_APP_CLOUDINARY_CLOUD_NAME;
+const cloudinaryUploadPreset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
 
 function requireFirebase() {
   if (!firebaseConfigured) {
     throw new Error('Firebase is not configured. Copy .env.development.local.example to .env.development.local and add your Firebase web app values.');
+  }
+}
+
+function requireCloudinary() {
+  if (!cloudinaryCloudName || !cloudinaryUploadPreset) {
+    throw new Error('Cloudinary is not configured. Add VUE_APP_CLOUDINARY_CLOUD_NAME and VUE_APP_CLOUDINARY_UPLOAD_PRESET to .env.development.local.');
   }
 }
 export const authReady = new Promise(resolve => {
@@ -145,25 +146,42 @@ export async function listDocuments(type) {
 
 export async function uploadDocument(file, title, type, userId) {
   requireFirebase();
-  const storagePath = `documents/${userId}/${Date.now()}-${file.name}`;
-  const fileRef = ref(storage, storagePath);
-  await uploadBytes(fileRef, file, { contentType: file.type });
-  const fileUrl = await getDownloadURL(fileRef);
+  requireCloudinary();
+
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', cloudinaryUploadPreset);
+  formData.append('folder', `documents/${userId}`);
+
+  const response = await fetch(
+    `https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/auto/upload`,
+    { method: 'POST', body: formData }
+  );
+  if (!response.ok) {
+    let details = '';
+    try {
+      const errorBody = await response.json();
+      details = errorBody.error?.message || '';
+    } catch (error) {
+      details = '';
+    }
+    throw new Error(`Cloudinary upload failed${details ? `: ${details}` : '.'}`);
+  }
+
+  const uploadedFile = await response.json();
   const documentRef = await addDoc(collection(db, 'documents'), {
     title: title || file.name,
-    file_url: fileUrl,
-    storagePath,
+    file_url: uploadedFile.secure_url,
+    cloudinaryPublicId: uploadedFile.public_id,
+    cloudinaryResourceType: uploadedFile.resource_type,
     type,
     ownerId: userId,
     createdAt: serverTimestamp()
   });
-  return { id: documentRef.id, title: title || file.name, file_url: fileUrl, type };
+  return { id: documentRef.id, title: title || file.name, file_url: uploadedFile.secure_url, type };
 }
 
 export async function removeDocument(documentItem) {
   requireFirebase();
   await deleteDoc(doc(db, 'documents', documentItem.id));
-  if (documentItem.storagePath) {
-    await deleteObject(ref(storage, documentItem.storagePath));
-  }
 }

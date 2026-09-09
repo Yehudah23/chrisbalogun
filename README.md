@@ -22,6 +22,22 @@ Cloud Storage. Copy `.env.development.local.example` to `.env.development.local`
 and fill in the Firebase web app values. Set `VUE_APP_FIREBASE_ADMIN_EMAIL` to
 the administrator email used by the site.
 
+### Cloudinary uploads
+
+The admin upload screen uses Cloudinary for CV and publication files while
+Firebase Auth and Firestore continue to manage users and document metadata.
+Create an **unsigned** upload preset in Cloudinary, then add its values to
+`.env.development.local`:
+
+```bash
+VUE_APP_CLOUDINARY_CLOUD_NAME=y7xto258
+VUE_APP_CLOUDINARY_UPLOAD_PRESET=your_unsigned_preset_name
+```
+
+Never add the Cloudinary API secret to frontend environment variables. Deleting
+a document removes its Firestore record; deleting the corresponding Cloudinary
+asset requires a secure backend function because it needs the API secret.
+
 Create the administrator account through Firebase Authentication, then set its
 Firestore document at `users/<uid>` to `{ "role": "admin" }`. Deploy the rules
 in `firestore.rules` and `storage.rules` before allowing uploads. New accounts
