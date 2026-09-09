@@ -12,6 +12,9 @@
                 <div v-if="isImage(f.file_url)" class="pub-thumbnail">
                   <img :src="f.file_url" :alt="f.title || 'Publication'" class="pub-image" />
                 </div>
+                <div v-else-if="isPdf(f.file_url)" class="pub-thumbnail pub-pdf-preview">
+                  <iframe :src="f.file_url" :title="`${f.title || 'Publication'} preview`"></iframe>
+                </div>
                 <div v-else class="pub-thumbnail pub-doc-icon">
                   <span class="doc-icon">📑</span>
                 </div>
@@ -80,6 +83,9 @@ export default {
     },
     isImage(url) { 
       return url && (url.endsWith('.jpg') || url.endsWith('.jpeg') || url.endsWith('.png') || url.endsWith('.gif')); 
+    },
+    isPdf(url) {
+      return url && url.toLowerCase().includes('.pdf');
     }
   }
 };
@@ -143,6 +149,11 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+.pub-pdf-preview iframe {
+  width: 100%;
+  height: 600px;
+  border: 0;
 }
 .pub-doc-icon {
   display: flex;

@@ -15,6 +15,15 @@
                   <a :href="f.file_url" target="_blank" class="cv-download-btn">View Full Size</a>
                 </div>
               </div>
+              <div v-else-if="isPdf(f.file_url)" class="cv-file-card">
+                <div class="cv-pdf-preview">
+                  <iframe :src="f.file_url" :title="`${f.title || 'CV Document'} preview`"></iframe>
+                </div>
+                <div class="cv-file-info">
+                  <h4>{{ f.title || 'CV Document' }}</h4>
+                  <a :href="f.file_url" target="_blank" class="cv-download-btn">Read Full Document</a>
+                </div>
+              </div>
               <div v-else class="cv-file-card">
                 <div class="cv-file-icon">
                   <span class="file-icon">📄</span>
@@ -79,6 +88,9 @@ export default {
     },
     isImage(url) { 
       return url && (url.endsWith('.jpg') || url.endsWith('.jpeg') || url.endsWith('.png') || url.endsWith('.gif')); 
+    },
+    isPdf(url) {
+      return url && url.toLowerCase().includes('.pdf');
     }
   }
 };
@@ -141,6 +153,17 @@ export default {
   height: 200px;
   object-fit: cover;
   border-bottom: 1px solid #eee;
+}
+.cv-pdf-preview {
+  height: 200px;
+  overflow: hidden;
+  background: #f5f7fa;
+  border-bottom: 1px solid #eee;
+}
+.cv-pdf-preview iframe {
+  width: 100%;
+  height: 600px;
+  border: 0;
 }
 .cv-file-icon {
   height: 150px;
