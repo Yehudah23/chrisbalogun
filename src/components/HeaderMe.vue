@@ -3,7 +3,7 @@
     <div class="navbar-container">
       <a href="/" class="navbar-brand" @click.prevent="$router.push({ name: 'Home' })">
         <span class="brand-mark">CB</span>
-        <span><strong>Chris Balogun</strong><small>Biotechnology research</small></span>
+        <span><h2>Chris Balogun</h2></span>
       </a>
       <nav :class="['navbar-links', { open: isMenuOpen }]">
         <router-link :to="{ name: 'about' }" @click="closeMenu">About</router-link>
@@ -169,11 +169,11 @@ export default {
   
   .navbar-links {
     position: absolute;
-    top: 60px;
-    right: 0;
+    top: 100%;
+    right: 0.75rem;
     background: #fff;
     flex-direction: column;
-    width: 220px;
+    width: min(220px, calc(100vw - 1.5rem));
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     padding: 1rem;
     gap: 0.8rem;
@@ -223,9 +223,8 @@ export default {
   }
   
   .navbar-links {
-    width: 180px;
+    width: min(180px, calc(100vw - 1.5rem));
     padding: 0.8rem;
-    top: 55px;
   }
   
   .navbar-links a {

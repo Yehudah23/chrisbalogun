@@ -122,6 +122,7 @@ export default {
   max-width: 1200px;
   margin: 0 auto;
   gap: 6rem;
+  min-width: 0;
 }
 .about-image-wrapper {
   position: relative;
@@ -217,10 +218,12 @@ export default {
 }
 .about-content {
   padding-top: 1rem;
+  min-width: 0;
 }
 .about-expertise {
   grid-column: 1 / -1;
   padding-top: 1rem;
+  min-width: 0;
 }
 .content-header {
   margin-bottom: 2rem;
@@ -299,6 +302,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 1rem;
+  min-width: 0;
 }
 .skill-category {
   background: var(--surface);
@@ -392,7 +396,7 @@ export default {
 }
 @media (max-width: 768px) {
   .about-section {
-    padding: 5rem 1rem;
+    padding: 4rem 1rem;
   }
   .about-image-wrapper {
     flex-direction: column;
@@ -423,7 +427,8 @@ export default {
     background: var(--line);
   }
   .about-title {
-    font-size: 2.2rem;
+    font-size: clamp(2rem, 9vw, 2.6rem);
+    overflow-wrap: anywhere;
   }
   .skills-grid {
     grid-template-columns: 1fr;

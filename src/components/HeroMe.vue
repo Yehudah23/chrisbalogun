@@ -97,7 +97,7 @@ export default {
 }
 .hero-content {
   flex: 1 1 350px;
-  min-width: 300px;
+  min-width: 0;
   max-width: 590px;
 }
 .hero-kicker {
@@ -182,7 +182,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 250px;
+  min-width: 0;
 }
 .hero-image {
   width: 100%;
@@ -281,7 +281,8 @@ export default {
   }
   
   .hero-title {
-    font-size: 2rem;
+    font-size: clamp(2.4rem, 12vw, 3.5rem);
+    overflow-wrap: anywhere;
   }
   
   .hero-subtitle {
@@ -295,6 +296,7 @@ export default {
   .hero-actions {
     flex-direction: column;
     gap: 0.8rem;
+    align-items: stretch;
   }
   
   .btn {
@@ -321,6 +323,7 @@ export default {
   
   .hero-subtitle {
     font-size: 1rem;
+    line-height: 1.35;
   }
   
   .hero-lead {
