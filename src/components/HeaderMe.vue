@@ -10,7 +10,7 @@
         <router-link :to="{ name: 'cv' }" @click="closeMenu">CV</router-link>
         <router-link :to="{ name: 'publications' }" @click="closeMenu">Publications</router-link>
         <router-link :to="{ name: 'contact' }" @click="closeMenu">Contact</router-link>
-  <a href="#" class="login-link" @click.prevent="openLogin">Admin Login</a>
+  <!-- <a href="#" class="login-link" @click.prevent="openLogin">Admin Login</a> -->
       </nav>
       <button class="navbar-toggle" @click="toggleMenu">
         <span v-if="!isMenuOpen">&#9776;</span>
