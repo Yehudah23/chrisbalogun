@@ -181,7 +181,6 @@ button, a {
   
   #content {
     min-height: calc(100vh - 120px);
-    padding: 0.5rem;
   }
 }
 
@@ -192,7 +191,6 @@ button, a {
   
   #content {
     min-height: calc(100vh - 100px);
-    padding: 0.3rem;
   }
 }
 

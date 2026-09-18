@@ -1,32 +1,57 @@
 <template>
   <section id="about" class="about-section">
     <div class="about-container">
-          <div class="about-image-wrapper">
-            <img
-              :src="imageSrc"
-              alt="Research Scientist at Work"
-              class="about-image"
-            />
+      <div class="about-image-wrapper">
+        <div class="about-image-frame">
+          <img
+            :src="imageSrc"
+            alt="Chris Balogun - Molecular Biology & Bioinformatics Researcher"
+            class="about-image"
+          />
+          <div class="image-accent"></div>
+        </div>
+        <div class="about-stats">
+          <div class="stat-item">
+            <span class="stat-number">1st</span>
+            <span class="stat-label">Class Honours</span>
           </div>
+          <div class="stat-item">
+            <span class="stat-number">5+</span>
+            <span class="stat-label">Research Areas</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">MSc</span>
+            <span class="stat-label">In Progress</span>
+          </div>
+        </div> 
+       </div>
       <div class="about-content">
-        <h2 class="about-title">About Me</h2>
-        <p class="about-lead">
-          With about 7 years of experience in biotechnology research, I specialize in developing innovative solutions at the intersection of biology and technology. My work focuses on sustainable biotechnological applications for healthcare, agriculture, and environmental remediation.
-        </p>
-        <h3 class="about-subtitle">Research Philosophy</h3>
-        <p class="about-text">
-          I believe that biotechnology holds the key to addressing some of our most pressing global challenges. My research approach combines rigorous scientific methodology with innovative thinking to develop practical solutions that can make a real-world impact.
-        </p>
-        <p class="about-text">
-          Through collaborative research and interdisciplinary partnerships, I strive to bridge the gap between laboratory discoveries and commercial applications, ensuring that scientific advances translate into tangible benefits for society.
-        </p>
-        <div class="about-expertise">
-          <div v-for="(item, index) in expertise" :key="index" class="about-expertise-item">
-            <span class="about-expertise-icon">{{ item.iconLabel }}</span>
-            <div>
-              <h4 class="about-expertise-title">{{ item.title }}</h4>
-              <p class="about-expertise-desc">{{ item.description }}</p>
-            </div>
+        <div class="content-header">
+          <span class="section-tag">About Me</span>
+          <h2 class="about-title">Bridging Wet-Lab Biology with Computational Discovery</h2>
+        </div>
+        <div class="about-text-block">
+          <p class="about-lead">
+            I am Chris Olamide Balogun, a Molecular Biology and Bioinformatics researcher working at the intersection of biotechnology and computational biology. My interests include immunoinformatics, vaccine design and computational drug discovery.
+          </p>
+          <p class="about-text">
+            I hold a B.Tech in Animal Nutrition and Biotechnology from Ladoke Akintola University of Technology, where I graduated with <strong>First Class honours</strong>. I am currently pursuing an MSc in Molecular Biology/Bioinformatics.
+          </p>
+          <p class="about-text">
+            My experience combines DNA extraction, PCR and sequencing with sequence analysis, antigen prediction, vaccine design, molecular docking and ADMET analysis. I also enjoy scientific writing, research communication and mentoring.
+          </p>
+          <p class="about-text about-goal">
+            My goal is to integrate experimental biology, bioinformatics and computational methods to support better therapeutic and preventive solutions.
+          </p>
+        </div>
+      </div>
+      <div class="about-expertise">
+        <h3 class="about-subtitle">Technical Expertise</h3>
+        <div class="skills-grid">
+          <div class="skill-category" v-for="(skill, index) in skills" :key="index">
+            <div class="skill-icon">{{ skill.icon }}</div>
+            <h4 class="skill-category-title">{{ skill.title }}</h4>
+            <p class="skill-items">{{ skill.items }}</p>
           </div>
         </div>
       </div>
@@ -41,11 +66,32 @@ export default {
   data() {
     return {
       imageSrc: broChris,
-      expertise: [
-        { iconLabel: '🔬', title: "Molecular Biology", description: "Advanced techniques in gene expression, protein synthesis, and cellular mechanisms" },
-        { iconLabel: '🧬', title: "Genetic Engineering", description: "CRISPR-Cas9, recombinant DNA technology, and synthetic biology applications" },
-        { iconLabel: '⚗️', title: "Bioprocessing", description: "Fermentation technology, bioreactor design, and downstream processing" },
-        { iconLabel: '👥', title: "Research Leadership", description: "Team management, project coordination, and cross-functional collaboration" }
+      skills: [
+        {
+          icon: '🧬',
+          title: 'Bioinformatics',
+          items: 'NCBI • BV-BRC • RAPT • sequence analysis • genome/protein analysis'
+        },
+        {
+          icon: '🛡️',
+          title: 'Immunoinformatics',
+          items: 'VaxiJen • NetCTLpan • NetMHCpan • C-ImmSim • ToxinPred • AllerTOP'
+        },
+        {
+          icon: '🔬',
+          title: 'Molecular Biology',
+          items: 'DNA extraction • PCR • sequencing • molecular biology workflows'
+        },
+        {
+          icon: '💊',
+          title: 'Computational Drug Discovery',
+          items: 'Molecular docking • virtual screening • ADMET • QSAR • molecular dynamics'
+        },
+        {
+          icon: '📊',
+          title: 'Research & Data Analysis',
+          items: 'Statistical analysis • scientific writing • literature review • data visualisation'
+        }
       ]
     };
   }
@@ -55,103 +101,347 @@ export default {
 <style scoped>
 .about-section {
   background: #fff;
-  padding: 6rem 1.5rem;
+  padding: 7rem 1.5rem;
   border-bottom: 1px solid var(--line);
   overflow: hidden;
+  position: relative;
+}
+.about-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
 }
 .about-container {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: center;
-  max-width: 1160px;
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  align-items: start;
+  max-width: 1200px;
   margin: 0 auto;
-  gap: 5rem;
+  gap: 6rem;
 }
 .about-image-wrapper {
-  flex: 1 1 320px;
   position: relative;
-  z-index: 1;
-  min-width: 250px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: 1.25rem;
+}
+.about-image-frame {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 4/4.5;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 
+    0 30px 60px -12px rgba(20, 125, 120, 0.25),
+    0 0 0 1px rgba(20, 125, 120, 0.08);
+}
+.about-image-frame::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent), #1a9a95);
+  opacity: 0.15;
+  z-index: -1;
+  filter: blur(20px);
 }
 .about-image {
-  max-width: 350px;
   width: 100%;
-  display: block;
-  border-radius: 2px;
-  box-shadow: -16px 16px 0 #d7e7e2;
+  height: 100%;
   object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.about-image-frame:hover .about-image {
+  transform: scale(1.03);
+}
+.image-accent {
+  position: absolute;
+  bottom: -20px;
+  left: -20px;
+  right: -20px;
+  height: 60px;
+  background: linear-gradient(90deg, var(--accent), #1a9a95);
+  border-radius: 4px;
+  opacity: 0.15;
+  z-index: -1;
+}
+.about-stats {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 420px;
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  box-shadow: 0 4px 20px rgba(20, 125, 120, 0.08);
+}
+.stat-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+}
+.stat-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: -0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 60%;
+  background: var(--line);
+}
+.stat-number {
+  font-family: Georgia, serif;
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--accent-dark);
+  line-height: 1.2;
+}
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 0.2rem;
 }
 .about-content {
-  flex: 2 1 400px;
-  min-width: 300px;
+  padding-top: 1rem;
+}
+.about-expertise {
+  grid-column: 1 / -1;
+  padding-top: 1rem;
+}
+.content-header {
+  margin-bottom: 2rem;
+}
+.section-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--warm);
+  padding: 0.4rem 1rem;
+  border-radius: 100px;
+  margin-bottom: 1rem;
+  border: 1px solid var(--line);
 }
 .about-title {
   font-family: Georgia, serif;
-  font-size: 3rem;
+  font-size: clamp(2.5rem, 4.5vw, 3.5rem);
+  line-height: 1.15;
   font-weight: 400;
   color: var(--text);
-  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+.about-text-block {
+  margin-bottom: 2rem;
 }
 .about-lead {
-  font-size: 1.1rem;
+  font-size: 1.08rem;
   color: var(--muted);
-  line-height: 1.8;
-  margin-bottom: 1.5rem;
-}
-.about-subtitle {
-  font-size: 1.2rem;
-  color: var(--accent-dark);
-  font-family: Georgia, serif;
+  line-height: 1.7;
+  margin-bottom: 1.15rem;
   font-weight: 400;
-  margin-bottom: 0.7rem;
-  margin-top: 1.2rem;
 }
 .about-text {
+  font-size: 1rem;
   color: var(--muted);
-  line-height: 1.75;
+  line-height: 1.7;
   margin-bottom: 1rem;
 }
-.about-expertise {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  margin: 2rem 0 1rem 0;
-}
-.about-expertise-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.7rem;
-  background: var(--warm);
-  border-left: 3px solid var(--accent);
-  padding: 1rem;
-  min-width: 180px;
-  flex: 1 1 180px;
-}
-.about-expertise-icon {
-  font-size: 1.5rem;
-  color: var(--accent);
-  margin-top: 0.1rem;
-}
-.about-expertise-title {
-  font-size: 1.1rem;
+.about-text strong {
+  color: var(--text);
   font-weight: 600;
-  margin-bottom: 0.2rem;
 }
-.about-expertise-desc {
-  font-size: 0.97rem;
+.about-goal {
+  border-left: 3px solid var(--accent);
+  padding-left: 1.5rem;
+  margin-top: 1rem !important;
+  background: var(--warm);
+  padding: 1.15rem 1.25rem;
+  border-radius: 0 4px 4px 0;
+  font-style: italic;
+}
+.about-subtitle {
+  font-family: Georgia, serif;
+  font-size: 1.4rem;
+  color: var(--accent-dark);
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+  margin-top: 0.5rem;
+  position: relative;
+  display: inline-block;
+}
+.about-subtitle::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1rem;
+}
+.skill-category {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1.15rem 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.skill-category::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), #1a9a95);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.skill-category:hover {
+  border-color: var(--accent);
+  box-shadow: 0 12px 30px -10px rgba(20, 125, 120, 0.2);
+  transform: translateY(-4px);
+}
+.skill-category:hover::before {
+  transform: scaleX(1);
+}
+.skill-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.55rem;
+  display: inline-block;
+  filter: drop-shadow(0 2px 4px rgba(20, 125, 120, 0.2));
+}
+.skill-category-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.01em;
+}
+.skill-items {
+  font-size: 0.82rem;
   color: var(--muted);
+  line-height: 1.55;
 }
-@media (max-width: 900px) {
-  .about-container {
-    flex-direction: column;
-    gap: 2.5rem;
+@media (max-width: 1100px) {
+  .skills-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  .about-image {
-    max-width: min(350px, 100%);
+}
+@media (max-width: 1024px) {
+  .about-container {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+  .about-image-wrapper {
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .about-image-frame {
+    max-width: 350px;
+    flex-shrink: 0;
+  }
+  .about-expertise {
+    padding-top: 0;
+  }
+  .about-stats {
+    max-width: 220px;
+    flex-direction: column;
+    min-width: 200px;
+  }
+  .stat-item:not(:last-child)::after {
+    display: none;
+  }
+  .stat-item:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    bottom: -0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 1px;
+    background: var(--line);
+  }
+}
+@media (max-width: 768px) {
+  .about-section {
+    padding: 5rem 1rem;
+  }
+  .about-image-wrapper {
+    flex-direction: column;
+  }
+  .about-image-frame {
+    max-width: 100%;
+    aspect-ratio: 4/3;
+  }
+  .about-content {
+    padding-top: 0;
+  }
+  .about-stats {
+    max-width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .stat-item:not(:last-child)::before {
+    display: none;
+  }
+  .stat-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: -0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 60%;
+    background: var(--line);
+  }
+  .about-title {
+    font-size: 2.2rem;
+  }
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 480px) {
+  .about-section {
+    padding: 4rem 0.8rem;
+  }
+  .about-stats {
+    gap: 1rem;
+    padding: 1rem;
+  }
+  .stat-number {
+    font-size: 1.5rem;
+  }
+  .stat-label {
+    font-size: 0.68rem;
   }
 }
 </style>
