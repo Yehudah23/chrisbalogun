@@ -46,7 +46,21 @@
           <div class="image-glow"></div>
         </div>
         <div class="floating-badge">
-          <div class="badge-icon" aria-hidden="true">DNA</div>
+          <div class="badge-icon" aria-label="DNA">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dna-icon" width="18" height="18" aria-hidden="true">
+              <path d="M2 15c6.667-6 13.333 0 20-6" />
+              <path d="m9 22 1.798-1.998c1.602-1.78 2.518-3.995 2.807-5.993" />
+              <path d="m15 2-1.798 1.998c-1.602 1.78-2.518 3.995-2.807 5.993" />
+              <path d="m17 6-2.5-2.5" />
+              <path d="m14 8-1-1" />
+              <path d="m7 18 2.5 2.5" />
+              <path d="m3.5 14.5.5.5" />
+              <path d="m20 9 .5.5" />
+              <path d="m6.5 12.5 1 1" />
+              <path d="m16.5 10.5 1 1" />
+              <path d="m10 16 1.5 1.5" />
+            </svg>
+          </div>
           <div class="badge-text">
             <span class="badge-title">Bioinformatics</span>
             <span class="badge-sub">Immunoinformatics • Drug Discovery</span>
@@ -218,9 +232,12 @@ export default {
   flex: 0 0 2.1rem;
   color: var(--surface);
   background: var(--accent-dark);
-  font-size: 0.58rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  border-radius: 4px;
+}
+.badge-icon .dna-icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  stroke: currentColor;
 }
 .badge-text {
   display: flex;

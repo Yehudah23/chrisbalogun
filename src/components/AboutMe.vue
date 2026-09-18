@@ -155,7 +155,9 @@ export default {
 .about-image {
   width: 100%;
   height: 100%;
+  display: block;
   object-fit: cover;
+  object-position: center top;
   transition: transform 0.6s ease;
 }
 .about-image-frame:hover .about-image {
@@ -400,18 +402,27 @@ export default {
   }
   .about-image-wrapper {
     flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
   }
   .about-image-frame {
-    max-width: 100%;
-    aspect-ratio: 4/3;
+    width: min(100%, 340px);
+    max-width: 340px;
+    aspect-ratio: 4 / 4.8;
+    margin: 0 auto;
   }
   .about-content {
     padding-top: 0;
   }
   .about-stats {
-    max-width: 100%;
+    width: min(100%, 340px);
+    max-width: 340px;
+    min-width: 0;
     flex-direction: row;
-    flex-wrap: wrap;
+    justify-content: space-around;
+    margin: 0 auto;
   }
   .stat-item:not(:last-child)::before {
     display: none;
@@ -436,17 +447,24 @@ export default {
 }
 @media (max-width: 480px) {
   .about-section {
-    padding: 4rem 0.8rem;
+    padding: 3.5rem 0.8rem;
+  }
+  .about-image-frame {
+    width: min(100%, 300px);
+    max-width: 300px;
+    aspect-ratio: 4 / 4.8;
   }
   .about-stats {
-    gap: 1rem;
-    padding: 1rem;
+    width: min(100%, 300px);
+    max-width: 300px;
+    gap: 0.6rem;
+    padding: 0.85rem 0.5rem;
   }
   .stat-number {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
   .stat-label {
-    font-size: 0.68rem;
+    font-size: 0.65rem;
   }
 }
 </style>
