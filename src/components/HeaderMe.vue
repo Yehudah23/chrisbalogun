@@ -2,7 +2,7 @@
   <header class="navbar">
     <div class="navbar-container">
       <a href="/" class="navbar-brand" @click.prevent="$router.push({ name: 'Home' })">
-        <span class="brand-mark"> <img src="/IMG_4384.PNG" alt=""></span>
+        <span class="brand-mark"> <img src="/IMG_4384.PNG" alt="" width="100px" height="100px"></span>
         <span><h2>Chris Balogun</h2></span>
       </a>
       <nav :class="['navbar-links', { open: isMenuOpen }]">
@@ -81,14 +81,14 @@ export default {
   text-transform: uppercase;
 }
 .brand-mark {
-  display: grid;
+  display: flex;
   place-items: center;
-  width: 2.3rem;
-  height: 2.3rem;
-  border: 1px solid var(--accent);
+  /* width: 2.5rem; */
+  /* height: 2.5rem; */
+  /* border: 1px solid var(--accent); */
   color: var(--accent);
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
+  /* font-size: 0.7rem;
+  letter-spacing: 0.08em; */
 }
 .navbar-links {
   display: flex;
