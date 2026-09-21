@@ -2,7 +2,7 @@
   <header class="navbar">
     <div class="navbar-container">
       <a href="/" class="navbar-brand" @click.prevent="$router.push({ name: 'Home' })">
-        <span class="brand-mark">CB</span>
+        <span class="brand-mark"> <img src="/IMG_4384.PNG" alt=""></span>
         <span><h2>Chris Balogun</h2></span>
       </a>
       <nav :class="['navbar-links', { open: isMenuOpen }]">
